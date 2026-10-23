@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Giftly</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a07;--rail:#0b120d;--card:#101912;--ink:#e8f4ec;--mute:#8aa192;--line:#1f3326;--g:#34e27a;--gd:#12301e;--warn:#ff7a6b;--wbg:#3a1a16;--on:#032413;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--img,var(--bg)) fixed;color:var(--ink);font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.45}
+.app{display:grid;grid-template-columns:220px 1fr;max-width:1040px;margin:0 auto;min-height:100vh}
+nav{background:var(--rail);border-right:1px solid var(--line);padding:26px 12px}
+.brand{font-size:1.5rem;font-weight:800;color:var(--g);margin:0 10px 18px;letter-spacing:-.02em}
+nav h2{font-size:.85rem;color:var(--mute);margin:20px 10px 8px;font-weight:600}
+.nv{display:flex;justify-content:space-between;width:100%;background:none;color:var(--ink);text-align:left;padding:9px 12px;border-radius:10px;margin-bottom:2px;border:0;font:inherit;cursor:pointer}
+.nv:hover{background:var(--card)}
+.nv.on{background:var(--g);color:var(--on);font-weight:700}
+.nv small{opacity:.7}
+main{padding:28px 20px 70px;min-width:0}
+h1{font-size:2.1rem;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--mute);margin:0 0 20px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+textarea{width:100%;min-height:130px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:10px 16px;font-weight:600}
+.primary{background:var(--g);color:var(--on)}
+.soft{background:var(--gd);color:var(--g)}
+.ghost{background:none;color:var(--mute);padding:6px 10px}
+.ghost:hover{color:var(--warn)}
+.form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:22px}
+.form input[type=text]{flex:1 1 200px}
+.form input.num{flex:0 1 110px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.lcard{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--g);border-radius:14px;padding:14px;text-align:left;color:var(--ink);position:relative}
+.lcard:hover{border-color:var(--g)}
+.lc-main{display:flex;flex-direction:column;min-width:0;flex:1}
+.lc-main b{font-size:1.1rem;overflow-wrap:anywhere}
+.meta{color:var(--mute);font-size:.88rem;font-weight:400}
+.chip{display:inline-block;align-self:flex-start;background:var(--gd);color:var(--g);border-radius:20px;padding:1px 10px;font-size:.82rem;font-weight:600;margin-top:4px}
+.chip.late{background:var(--wbg);color:var(--warn)}
+.ring{width:54px;height:54px;border-radius:50%;flex:none;background:conic-gradient(var(--g) var(--p),var(--line) 0);display:grid;place-items:center;position:relative}
+.ring::before{content:"";position:absolute;inset:6px;background:var(--card);border-radius:50%}
+.ring span{position:relative;font-size:.8rem;font-weight:700}
+.thumbs{display:flex;flex:none}
+.thumbs img{width:38px;height:38px;object-fit:cover;border-radius:50%;border:2px solid var(--card);margin-left:-12px}
+.empty{text-align:center;color:var(--mute);padding:40px 10px;border:2px dashed var(--line);border-radius:16px}
+.back{margin-bottom:10px;padding-left:0}
+.pic{width:52px;height:52px;border-radius:14px;background:var(--gd);color:var(--g);display:grid;place-items:center;flex:none}
+.pic svg{width:28px;height:28px}
+.pick{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.pick .top2{display:flex;gap:12px;align-items:center}
+.pick b{font-size:1.02rem}
+.pick .why{color:var(--mute);font-size:.9rem}
+.pick .row{margin-top:auto;align-items:center}
+.pick a.find{background:var(--gd);color:var(--g);border-radius:10px;padding:9px 14px;font-weight:600;text-decoration:none}
+.pick .est{color:var(--mute);font-size:.88rem;margin-right:auto}
+#fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.fab-btn{display:flex;align-items:center;gap:8px;background:var(--g);color:var(--on);border-radius:999px;padding:12px 18px;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.fab-btn svg{width:20px;height:20px}
+.fab-panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px;width:260px;max-height:60vh;overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+body:not(.go) #fab{opacity:0}
+.sech{justify-content:space-between;align-items:center;margin:26px 0 10px}
+.sech h2{margin:0;font-size:1.25rem}
+.fyh{font-size:1.4rem;margin:6px 0 2px}
+.bar{height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin:10px 0 16px}
+.bar i{display:block;height:100%;background:var(--g)}.bar i.over{background:var(--warn)}
+.over{color:var(--warn);font-weight:600}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+ul{list-style:none;margin:0;padding:0 16px}
+li{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+li:first-child{border-top:0}
+li input[type=checkbox]{width:22px;height:22px;accent-color:var(--g);flex:none}
+li img{width:52px;height:52px;object-fit:cover;border-radius:10px;flex:none}
+li .name{flex:1;overflow-wrap:anywhere}
+li.done .name{text-decoration:line-through;color:var(--mute)}
+li .price{color:var(--mute);font-variant-numeric:tabular-nums}
+li .name a{color:var(--g);font-size:.88rem;margin-left:8px;white-space:nowrap}
+.add-gift{padding:14px 16px;border-top:1px solid var(--line)}
+.add-gift input[type=text]{flex:1 1 140px}
+.add-gift input.num{flex:0 1 90px}
+label.photo{background:var(--gd);color:var(--g);border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:16px}
+.idea{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.idea b{font-size:1.02rem}
+.idea .row select{flex:1;min-width:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips .soft.on{background:var(--g);color:var(--on)}
+.santa{display:grid;gap:10px;margin-top:18px}
+.draw{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.msg{color:var(--warn);margin-top:8px}
+.lg-a{fill:var(--g)}.lg-b{fill:var(--on)}.lg-bow{fill:var(--g);stroke:var(--bg);stroke-width:3;stroke-linejoin:round}.lg-knot{fill:var(--on);stroke:var(--g);stroke-width:3}
+#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer}
+.s-bg{position:absolute;inset:0;background:var(--img,var(--bg));transition:opacity .7s ease}
+.s-logo{position:relative;width:128px;height:128px;animation:twirl 1.5s cubic-bezier(.2,.9,.3,1.15) both}
+.s-logo svg{width:100%;height:100%;display:block}
+.s-name{position:relative;font-size:2.1rem;font-weight:800;color:var(--g);letter-spacing:-.02em;opacity:0;animation:sIn .6s ease .9s forwards;transition:opacity .35s}
+#splash.leave .s-bg{opacity:0}
+#splash.leave .s-name{animation:none;opacity:0}
+@keyframes twirl{0%{transform:scale(.1) rotate(-360deg);opacity:0}60%{transform:scale(1.12) rotate(14deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes sIn{from{transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes topIn{from{opacity:0}}
+@keyframes appIn{from{opacity:0;transform:translateY(12px)}}
+body:not(.go) .top,body:not(.go) .app{opacity:0}
+body:not(.landed) .tlogo{opacity:0}
+.go .top{animation:topIn .7s ease both}
+.go .app{animation:appIn .7s ease both}
+.tlogo{width:36px;height:36px;flex:none;display:block}
+.tlogo svg{width:100%;height:100%;display:block}
+@media (prefers-reduced-motion:reduce){.s-logo{animation:none}.s-name{animation:none;opacity:1}.go .top,.go .app{animation:none}}
+.top{display:flex;align-items:center;gap:12px;max-width:1040px;margin:0 auto;padding:12px 20px 0}
+.menu{display:flex;align-items:center;gap:8px;background:var(--card);color:var(--ink);border:1px solid var(--line);padding:8px 12px}
+.menu svg{width:18px;height:18px;stroke:currentColor}
+.tbrand{font-weight:800;font-size:1.3rem;color:var(--g);letter-spacing:-.02em;margin-right:4px}
+.menu{margin-right:auto}
+@media (max-width:480px){.menu span{display:none}}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{background:none;color:var(--mute);padding:6px 12px}
+.seg button.on{background:var(--g);color:var(--on)}
+.app.collapsed{grid-template-columns:1fr}
+.app.collapsed nav{display:none}
+.nv.in{padding-left:24px;font-size:.95rem}
+.nv.more{color:var(--g);font-weight:600}
+.nv.grp small{font-size:1rem}
+.swatches{display:flex;gap:8px;padding:0 10px;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:50%;padding:0;background:linear-gradient(135deg,var(--b) 50%,var(--c) 50%);border:2px solid var(--line)}
+.sw.on{border-color:var(--ink)}
+@media (max-width:720px){
+ .swatches{flex:none;padding:0 6px;flex-wrap:nowrap}
+ .app{grid-template-columns:1fr}
+ nav{border-right:0;border-bottom:1px solid var(--line);padding:12px;display:flex;gap:6px;overflow-x:auto;align-items:center}
+ .brand,nav h2{display:none}
+ .nv{width:auto;white-space:nowrap;gap:8px;margin:0;flex:none}
+}
+</style>
+</head>
+<body>
+<div id="splash" aria-hidden="true"><div class="s-bg"></div><div class="s-logo"><svg viewBox="0 0 120 120" aria-hidden="true"><rect class="lg-a" x="24" y="62" width="72" height="46" rx="7" opacity=".85"/><rect class="lg-a" x="18" y="42" width="84" height="22" rx="7"/><rect class="lg-b" x="54" y="42" width="12" height="66"/><path class="lg-bow" d="M60 42C38 8 10 26 36 42Z"/><path class="lg-bow" d="M60 42C82 8 110 26 84 42Z"/><circle class="lg-knot" cx="60" cy="42" r="8"/></svg></div><div class="s-name">Giftly</div></div>
+<script>
+(function(){var sp=document.getElementById("splash"),done=false,still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function enter(){if(done)return;done=true;var lg=sp.querySelector(".s-logo"),t=document.getElementById("tlogo");
+ if(still||!t){document.body.classList.add("go","landed");sp.remove();return;}
+ var b=t.getBoundingClientRect(),ax=lg.offsetLeft+lg.offsetWidth/2,ay=lg.offsetTop+lg.offsetHeight/2;
+ lg.style.animation="none";lg.style.transform="none";void lg.offsetWidth;
+ lg.style.transition="transform .8s cubic-bezier(.6,0,.2,1)";
+ lg.style.transform="translate("+(b.left+b.width/2-ax)+"px,"+(b.top+b.height/2-ay)+"px) scale("+(b.width/lg.offsetWidth)+")";
+ sp.classList.add("leave");document.body.classList.add("go");
+ setTimeout(function(){document.body.classList.add("landed");sp.remove();},850);}
+sp.addEventListener("click",enter);setTimeout(enter,still?500:2100);})();
+</script>
+<header class="top"><span class="tlogo" id="tlogo"><svg viewBox="0 0 120 120" aria-hidden="true"><rect class="lg-a" x="24" y="62" width="72" height="46" rx="7" opacity=".85"/><rect class="lg-a" x="18" y="42" width="84" height="22" rx="7"/><rect class="lg-b" x="54" y="42" width="12" height="66"/><path class="lg-bow" d="M60 42C38 8 10 26 36 42Z"/><path class="lg-bow" d="M60 42C82 8 110 26 84 42Z"/><circle class="lg-knot" cx="60" cy="42" r="8"/></svg></span><span class="tbrand">Giftly</span><button class="menu" id="menuBtn" aria-label="Open or close the side panel" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Panel</span></button><div class="seg" role="group" aria-label="Display mode"><button data-m="normal">Normal</button><button data-m="night">Night</button></div></header>
+<div id="fab"></div>
+<div class="app"><nav id="nav" aria-label="Sections"></nav><main id="main"></main></div>
+<script>
+const KEY="giftlists-v1",SKEY="giftlists-santa-v1";
+const CATS=["Child","Son","Daughter","Partner","Mom","Dad","Parent","Grandma","Grandpa","Brother","Sister","Friend","Coworker","Teacher","Other"];
+const LABEL={Child:"Gifts for your child",Son:"Gifts for your son",Daughter:"Gifts for your daughter",Partner:"Gifts for your partner",Mom:"Gifts for mom",Dad:"Gifts for dad",Parent:"Gifts for a parent",Grandma:"Gifts for grandma",Grandpa:"Gifts for grandpa",Brother:"Gifts for your brother",Sister:"Gifts for your sister",Friend:"Gifts for a friend",Coworker:"Gifts for a coworker",Teacher:"Gifts for a teacher",Other:"Other gifts"};
+const OCC=["Birthday","Holiday","Wedding","Baby shower","Anniversary","Just because"];
+const KID=["Building block set","Art and craft kit","Picture book bundle","Bike helmet","Family board game","Science experiment kit","Dress-up costume","Cuddly stuffed animal"];
+const IDEAS={
+Child:KID,Son:KID,Daughter:KID,
+Partner:["Cozy blanket","Date night experience","Photo book of your year","Wireless earbuds","Cologne or perfume","Weekend getaway","New cookbook","Engraved jewelry"],
+Mom:["Spa gift set","Jewelry","Flower subscription","Cozy robe","Cookbook","Candle set","Framed family photo","Brunch gift card"],
+Dad:["Tool set","Grill accessories","Quality wallet","Coffee subscription","Smart watch","Fishing or golf gear","Whiskey glass set","Streaming gift card"],
+Parent:["Digital photo frame","Heated massage cushion","Quality slippers","Gourmet food basket","Garden tool set","Streaming subscription","Tablet","Family portrait session"],
+Grandma:["Digital photo frame","Cozy throw blanket","Photo book of the grandkids","Warm slippers","Large-print puzzle book","Tea sampler","Personalized family tree","Flower bouquet"],
+Grandpa:["Digital photo frame","Cozy throw blanket","Photo book of the grandkids","Warm slippers","Large-print puzzle book","Coffee sampler","Personalized family tree","Comfortable cardigan"],
+Brother:["Video game","Hoodie","Wireless headphones","Sports jersey","Grooming kit","Board game for two","Backpack","Gift card for his favorite food"],
+Sister:["Skincare set","Jewelry","Tote bag","Cozy socks","Journal and pens","Makeup organizer","Scented candle","Gift card for her favorite shop"],
+Friend:["Cocktail or coffee kit","Scented candle","Party game","Portable speaker","Plant with a nice pot","Custom mug","Concert tickets","Gift card to a favorite spot"],
+Coworker:["Desk plant","Insulated tumbler","Notebook and pen set","Tea sampler","Desk organizer","Snack box","Phone stand","Hand cream set"],
+Teacher:["Coffee gift card","Classroom supplies","Handwritten thank-you card","Tote bag","Hand cream","Desk plant","Box of chocolates","Personalized pen"],
+Other:["Gift card","Jigsaw puzzle","Scented candle","Best-selling novel","Chocolate box","Photo calendar","Warm socks","Houseplant"]};
+let interests=["gaming","music"],shopCat="all",fabOpen=false;
+try{const v=localStorage.getItem("giftly-interests");if(v)interests=JSON.parse(v)||[];}catch(e){}
+let data=[],santa={names:"",budget:"",draw:null,msg:""},view="lists",open=null,filter="All",ideaCat="Child",pendImg="",shown={};
+try{const s=localStorage.getItem(KEY);if(s)data=JSON.parse(s)||[];}catch(e){}
+try{const s=localStorage.getItem(SKEY);if(s)santa=Object.assign(santa,JSON.parse(s));}catch(e){}
+data.forEach(l=>{if(!l.cat)l.cat="Other";if(!l.gifts)l.gifts=[];});
+const $=id=>document.getElementById(id);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));localStorage.setItem(SKEY,JSON.stringify(santa));}catch(e){}};
+const uid=()=>Math.random().toString(36).slice(2,9);
+const money=n=>"$"+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});
+const esc=t=>{const d=document.createElement("div");d.textContent=t==null?"":t;return d.innerHTML.replace(/"/g,"&quot;").replace(/'/g,"&#39;");};
+function normUrl(v){v=(v||"").trim();if(!v)return "";if(!/^https?:\/\//i.test(v))v="https://"+v;try{const u=new URL(v);return /^https?:$/.test(u.protocol)&&u.hostname.indexOf(".")>0?u.href:null;}catch(e){return null;}}
+const host=u=>{try{return new URL(u).hostname.replace(/^www\./,"");}catch(e){return "link";}};
+function shrink(file,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,160/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.7));};im.onerror=()=>cb("");im.src=r.result;};r.onerror=()=>cb("");r.readAsDataURL(file);}
+const K=["bg","rail","card","ink","mute","line","g","gd","warn","wbg","on","img"];
+const P=a=>Object.fromEntries(K.map((k,i)=>[k,a[i]||a[0]]));
+const PAL={
+beach:{name:"Beach",
+ normal:P(["#e6f5fa","rgba(255,255,255,.55)","#ffffff","#0b2a4a","#4f6f8f","#bcdcec","#1d4ed8","#dbeafe","#d9480f","#ffe8dc","#ffffff","linear-gradient(180deg,#cfeefa 0%,#e9f7fb 40%,#fbf3de 100%)"]),
+ night:P(["#071a33","rgba(8,22,45,.7)","#0e2442","#e6f1ff","#8fb0d4","#1f3d66","#4f8bff","#153a73","#ff8a6b","#4a2118","#04122e","linear-gradient(180deg,#06162e 0%,#0a2447 55%,#16263a 100%)"])},
+forest:{name:"Forest",
+ normal:P(["#eef7f0","#dff0e4","#ffffff","#10281a","#557263","#cfe3d6","#12803f","#dcf3e4","#c0392b","#fde3e0","#ffffff"]),
+ night:P(["#060a07","#0b120d","#101912","#e8f4ec","#8aa192","#1f3326","#34e27a","#12301e","#ff7a6b","#3a1a16","#032413"])},
+sunset:{name:"Sunset",
+ normal:P(["#fff4ea","#ffe6d1","#ffffff","#3a1a0c","#94654a","#f4d3b8","#c2410c","#ffe2cc","#b42318","#fde3e0","#ffffff"]),
+ night:P(["#140a0c","#1c0f12","#241418","#fff0e8","#c29a8a","#3d2226","#ff8a3d","#4a2512","#ff5d6c","#4a1620","#2a1000"])},
+berry:{name:"Berry",
+ normal:P(["#fff4f8","#ffe6ef","#ffffff","#3a1428","#8a5a73","#f2cfdd","#d6246e","#fde0ec","#c0392b","#fde3e0","#ffffff"]),
+ night:P(["#1a0a13","#24101b","#2c1423","#ffe9f3","#c99ab3","#4a2339","#ff5c9e","#52193a","#ff8a6b","#4a1c1c","#2a0716"])},
+indigo:{name:"Indigo",
+ normal:P(["#f1f2ff","#e4e6ff","#ffffff","#1b1f4a","#5d6399","#d2d6f5","#4a55e0","#e1e4ff","#c0392b","#fde3e0","#ffffff"]),
+ night:P(["#080b1a","#0d1226","#121832","#e9edff","#8f99c4","#222b52","#7c8cff","#1d2554","#ff7a8a","#3a1a28","#0a0f33"])}};
+const THEMES=Object.keys(PAL);
+let theme="beach",mode="normal",navOpen=true,catOpen=false,catCount=4;
+try{theme=localStorage.getItem("giftly-theme")||"beach";mode=localStorage.getItem("giftly-mode")||"normal";navOpen=localStorage.getItem("giftly-nav")!=="0";}catch(e){}
+if(!PAL[theme])theme="beach";if(mode!=="night")mode="normal";
+function applyTheme(){const p=PAL[theme][mode],r=document.documentElement;for(const k in p)r.style.setProperty("--"+k,p[k]);r.style.colorScheme=mode==="night"?"dark":"light";document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.m===mode));}
+function applyNav(){document.querySelector(".app").classList.toggle("collapsed",!navOpen);$("menuBtn").setAttribute("aria-expanded",String(navOpen));}
+function setTheme(t){theme=t;try{localStorage.setItem("giftly-theme",t);}catch(e){}applyTheme();renderNav();}
+function setMode(m){mode=m;try{localStorage.setItem("giftly-mode",m);}catch(e){}applyTheme();renderNav();}
+const find=id=>data.find(l=>l.id===id);
+const spentOf=l=>l.gifts.reduce((a,g)=>a+g.price,0);
+function when(l){if(!l.date)return "";const d=Math.ceil((new Date(l.date+"T00:00:00")-new Date().setHours(0,0,0,0))/864e5);
+  return d<0?'<span class="chip late">Date passed</span>':d===0?'<span class="chip">Today</span>':'<span class="chip">'+d+(d===1?" day":" days")+' left</span>';}
+function go(v,id){view=v;open=id||null;pendImg="";render();window.scrollTo(0,0);}
+
+function renderNav(){
+  let h='<button class="nv'+(view==="lists"&&!open&&filter==="All"?" on":"")+'" data-a="nav" data-v="lists">My lists <small>'+data.length+'</small></button>'+
+   '<button class="nv'+(view==="shop"?" on":"")+'" data-a="nav" data-v="shop">Picks for you</button>'+'<button class="nv'+(view==="ideas"?" on":"")+'" data-a="nav" data-v="ideas">Idea board</button>'+
+   '<button class="nv'+(view==="santa"?" on":"")+'" data-a="nav" data-v="santa">Secret Santa</button>';
+  const fi=CATS.indexOf(filter),vis=Math.min(CATS.length,Math.max(catCount,fi+1));
+  h+='<button class="nv grp" data-a="catToggle" aria-expanded="'+catOpen+'">Who it’s for <small>'+(catOpen?"▾":"▸")+'</small></button>';
+  if(catOpen){
+    CATS.slice(0,vis).forEach(c=>{const n=data.filter(l=>l.cat===c).length;h+='<button class="nv in'+(view==="lists"&&filter===c?" on":"")+'" data-a="cat" data-c="'+c+'">'+LABEL[c]+' <small>'+n+'</small></button>';});
+    h+=vis<CATS.length?'<button class="nv in more" data-a="catMore">Show more</button>':'<button class="nv in more" data-a="catLess">Show less</button>';
+  }
+  h+='<h2>Theme</h2><div class="swatches">'+THEMES.map(t=>'<button class="sw'+(t===theme?" on":"")+'" data-a="theme" data-t="'+t+'" style="--c:'+PAL[t][mode].g+';--b:'+PAL[t][mode].bg+'" aria-label="'+PAL[t].name+' theme" title="'+PAL[t].name+'"></button>').join("")+'</div>';$("nav").innerHTML=h;
+}
+function card(l){
+  const n=l.gifts.length,got=l.gifts.filter(g=>g.done).length,pct=n?Math.round(got/n*100):0;
+  const imgs=l.gifts.filter(g=>g.img).slice(0,3).map(g=>'<img src="'+esc(g.img)+'" alt="" referrerpolicy="no-referrer">').join("");
+  return '<button class="lcard" data-a="open" data-id="'+l.id+'"><div class="ring" style="--p:'+(pct*3.6)+'deg"><span>'+pct+'%</span></div><div class="lc-main"><b>'+esc(l.name)+'</b><span class="meta">'+esc(l.occasion?l.occasion+" for ":"For ")+esc(LABEL[l.cat].replace("Gifts for ","").replace("Other gifts","anyone"))+'</span><span class="meta">'+n+(n===1?" gift, ":" gifts, ")+money(spentOf(l))+(l.budget>0?" of "+money(l.budget):"")+'</span>'+when(l)+'</div><div class="thumbs">'+imgs+'</div></button>';
+}
+function lists(){
+  const sh=data.filter(l=>filter==="All"||l.cat===filter);
+  const dc=filter!=="All"?filter:"Other";
+  return '<h1>'+(filter==="All"?"My lists":esc(LABEL[filter]))+'</h1><p class="sub">Make a list for each person or occasion, then fill it with gift ideas.</p>'+
+   '<div class="row form"><input type="text" id="ln" placeholder="List name, like Mia’s birthday" aria-label="List name" maxlength="50">'+
+   '<select id="lc" aria-label="Who it’s for">'+CATS.map(c=>'<option value="'+c+'"'+(c===dc?' selected':'')+'>'+LABEL[c]+'</option>').join("")+'</select>'+
+   '<select id="lo" aria-label="Occasion">'+OCC.map(o=>'<option>'+o+'</option>').join("")+'</select>'+
+   '<input type="date" id="ld" aria-label="Date of the occasion"><input class="num" type="number" min="0" inputmode="decimal" id="lb" placeholder="Budget $" aria-label="Budget in dollars">'+
+   '<button class="primary" data-a="mk">Create list</button></div>'+
+   (sh.length?'<div class="grid">'+sh.map(card).join("")+'</div>':'')+forYou();
+}
+const INTERESTS=[["gaming","Gaming"],["music","Music and audio"],["tech","Tech"],["fashion","Fashion"],["fitness","Fitness"],["outdoors","Outdoors"],["cooking","Cooking"],["reading","Books and hobbies"],["beauty","Beauty"],["family","Family"]];
+const SHOPCATS=[["gaming","Gaming and Esports"],["audio","Audio and Headphones"],["tech","Tech Accessories"],["apparel","Apparel and Streetwear"],["footwear","Footwear and Bags"],["style","Style and Jewelry"],["home","Home and Kitchen"],["fitness","Fitness and Outdoors"],["beauty","Beauty and Self-Care"],["books","Books and Hobbies"],["kids","Kids and Family"]];
+const ICONS={grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+headset:'<path d="M4 14v-2a8 8 0 0116 0v2"/><rect x="3" y="13" width="4" height="7" rx="1.5"/><rect x="17" y="13" width="4" height="7" rx="1.5"/>',
+controller:'<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10v5M4.5 12.5h5M16 11.5h.01M18.5 14h.01"/>',
+keyboard:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+mouse:'<rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 3v6"/>',
+chair:'<path d="M8 3h8v9H8zM6 12h12v4H6zM12 16v4M8 21h8"/>',
+earbuds:'<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M8 11v8M16 11v8"/>',
+speaker:'<rect x="6" y="2" width="12" height="20" rx="3"/><circle cx="12" cy="15" r="3.5"/><path d="M12 7h.01"/>',
+mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4"/>',
+charger:'<rect x="7" y="9" width="10" height="9" rx="2"/><path d="M10 9V4M14 9V4M12 18v3"/>',
+watch:'<rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6l1-3h4l1 3M9 18l1 3h4l1-3"/>',
+bag:'<rect x="5" y="8" width="14" height="13" rx="3"/><path d="M9 8V6a3 3 0 016 0v2M9 14h6"/>',
+camera:'<rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l1.5-3h5L16 7"/>',
+shirt:'<path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/>',
+pants:'<path d="M7 3h10l1 18h-4l-2-9-2 9H6z"/>',
+cap:'<path d="M4 15a8 8 0 0116 0zM3 15h18"/>',
+shoe:'<path d="M3 16l3-7 4 3 4 1c3 .5 6 1 7 3v1H3z"/>',
+wallet:'<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M15 12h6v3h-6z"/>',
+glasses:'<circle cx="7" cy="14" r="4"/><circle cx="17" cy="14" r="4"/><path d="M11 14h2"/>',
+gem:'<path d="M6 4h12l3 5-9 12L3 9z"/>',
+mug:'<path d="M5 8h11v7a4 4 0 01-4 4H9a4 4 0 01-4-4zM16 10h2a2 2 0 010 5h-2M8 3v2M12 3v2"/>',
+bulb:'<path d="M9 18h6M10 21h4M8 14a6 6 0 118 0c-1 1-1 2-1 3H9c0-1 0-2-1-3z"/>',
+blanket:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M3 14h18"/>',
+dumbbell:'<path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12"/>',
+bottle:'<path d="M10 2h4v3l2 3v13a1 1 0 01-1 1H9a1 1 0 01-1-1V8l2-3z"/>',
+tent:'<path d="M3 20L12 4l9 16zM12 20v-6"/>',
+lotion:'<rect x="6" y="9" width="12" height="11" rx="3"/><path d="M12 9V6M12 3c1 1.5 1 2.5 0 3"/>',
+book:'<path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2zM4 19a2 2 0 012-2h13"/>',
+puzzle:'<path d="M4 4h6a2 2 0 114 0h6v6a2 2 0 100 4v6h-6a2 2 0 10-4 0H4z"/>',
+dice:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h.01M16 8h.01M12 12h.01M8 16h.01M16 16h.01"/>',
+pencil:'<path d="M4 20l1-5L16 4l4 4L9 19z"/>',
+note:'<path d="M9 18V5l11-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM20 16a3 3 0 11-6 0 3 3 0 016 0z"/>',
+blocks:'<rect x="3" y="11" width="18" height="9" rx="2"/><circle cx="8" cy="8.5" r="1.5"/><circle cx="16" cy="8.5" r="1.5"/>'};
+const ic=k=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[k]||ICONS.grid)+'</svg>';
+const PRODUCTS=[
+["Wireless gaming headset","gaming",["gaming","music"],"headset","wireless gaming headset","$60–150","headset","Clear voice chat and all-day comfort for long sessions."],
+["Mechanical gaming keyboard","gaming",["gaming","tech"],"keyboard","mechanical gaming keyboard","$50–140","keyboard","Fast, satisfying keys with customizable lighting."],
+["Lightweight gaming mouse","gaming",["gaming"],"mouse","lightweight wireless gaming mouse","$40–100","mouse","Precise tracking that stays light in the hand."],
+["Wireless game controller","gaming",["gaming"],"controller","wireless game controller","$45–80","controller","Works across console, PC and phone."],
+["Ergonomic gaming chair","gaming",["gaming","family"],"chair","ergonomic gaming chair","$150–350","chair","Back support for marathon sessions."],
+["Noise-cancelling headphones","audio",["music","tech"],"headphones","noise cancelling headphones","$80–350","headset","Quiet commutes and focused work."],
+["True wireless earbuds","audio",["music","tech","fitness"],"earbuds","true wireless earbuds","$30–200","earbuds","Pocket-sized sound with a charging case."],
+["Portable Bluetooth speaker","audio",["music","outdoors"],"speaker","portable bluetooth speaker","$30–150","speaker","Big sound for the beach, backyard or desk."],
+["USB streaming microphone","audio",["gaming","music"],"microphone","usb microphone streaming","$50–150","mic","Studio-clear voice for calls and streams."],
+["Fast-charging power bank","tech",["tech","outdoors"],"charger","power bank fast charging","$25–70","charger","Never run out of battery on the go."],
+["Wireless charging stand","tech",["tech"],"charger","wireless charging stand","$15–45","charger","Drop your phone on it and it charges."],
+["Smartwatch","tech",["tech","fitness"],"watch","smartwatch","$100–400","watch","Notifications, health tracking and more."],
+["Laptop backpack","tech",["tech","fashion"],"backpack","laptop backpack","$35–120","bag","Padded protection with room for everything."],
+["1080p streaming webcam","tech",["tech","gaming"],"webcam","1080p webcam","$40–130","camera","Sharp video for calls and streaming."],
+["Smart LED light strips","tech",["gaming","tech","family"],"lights","led light strips","$15–50","bulb","Set the mood for a gaming room or bedroom."],
+["Heavyweight hoodie","apparel",["fashion"],"hoodie","heavyweight hoodie","$40–110","shirt","A thick, structured fit that lasts."],
+["Graphic tee","apparel",["fashion","gaming"],"shirt","graphic tee","$20–50","shirt","Easy everyday style with a bit of personality."],
+["Cargo joggers","apparel",["fashion"],"pants","cargo joggers","$35–90","pants","Comfortable with plenty of pockets."],
+["Beanie and gloves set","apparel",["fashion","outdoors"],"beanie","beanie gloves set","$20–50","cap","A warm, matching winter pair."],
+["Fleece-lined jacket","apparel",["outdoors","fashion"],"jacket","fleece lined jacket","$60–180","shirt","Warm layers for cold days."],
+["Everyday sneakers","footwear",["fashion"],"sneakers","sneakers","$60–150","shoe","Clean, comfortable and goes with anything."],
+["Cozy slippers","footwear",["family","fashion"],"slippers","slippers","$25–80","shoe","Soft, warm and made for the house."],
+["Crossbody sling bag","footwear",["fashion","tech"],"bag","crossbody sling bag","$25–70","bag","Hands-free carry for phone and essentials."],
+["Minimalist watch","style",["fashion"],"watch","minimalist watch","$50–250","watch","A clean look for every outfit."],
+["Leather wallet","style",["fashion"],"wallet","leather wallet","$30–120","wallet","Slim, durable and always useful."],
+["Polarized sunglasses","style",["fashion","outdoors"],"sunglasses","polarized sunglasses","$25–150","glasses","Sharp style with real sun protection."],
+["Layered necklace","style",["fashion","beauty"],"necklace","layered necklace","$20–100","gem","A simple piece that suits many outfits."],
+["Single-serve coffee maker","home",["cooking","tech"],"coffee","coffee maker","$40–150","mug","A fresh cup in under a minute."],
+["Air fryer","home",["cooking"],"fryer","air fryer","$60–150","bulb","Crispy food with little oil and no fuss."],
+["Weighted blanket","home",["family","beauty"],"blanket","weighted blanket","$40–120","blanket","Calming weight for cozy nights."],
+["Adjustable dumbbells","fitness",["fitness"],"dumbbells","adjustable dumbbells","$120–400","dumbbell","A full home gym that takes little space."],
+["Running shoes","fitness",["fitness","fashion"],"running","running shoes","$70–160","shoe","Cushioned support for every mile."],
+["Insulated water bottle","fitness",["fitness","outdoors"],"bottle","insulated water bottle","$20–45","bottle","Keeps drinks cold all day."],
+["Camping hammock","fitness",["outdoors"],"hammock","camping hammock","$25–70","tent","Light, packable and easy to hang."],
+["Skincare gift set","beauty",["beauty"],"skincare","skincare gift set","$30–90","lotion","A ready-made routine in a box."],
+["Scented candle set","beauty",["beauty","family"],"candle","scented candle set","$20–60","lotion","Warm scents for any room."],
+["Best-selling novel","books",["reading"],"novel","best selling novel","$10–25","book","A page-turner for a quiet evening."],
+["Instant camera","books",["tech","reading"],"camera","instant camera","$60–140","camera","Prints memories on the spot."],
+["Beginner ukulele","books",["music","reading"],"ukulele","ukulele beginner","$40–120","note","A fun first instrument to learn."],
+["Building block set","kids",["family"],"blocks","building block set","$20–100","blocks","Hours of creative play."],
+["Family board game","kids",["family"],"game","family board game","$20–50","dice","Game night everyone can join."],
+["Kids art supply set","kids",["family"],"art","kids art supply set","$15–45","pencil","Everything needed to create at home."]
+].map(a=>({n:a[0],c:a[1],t:a[2],k:a[3],q:a[4],pr:a[5],i:a[6],w:a[7]}));
+function pickCard(p,s){
+  return '<div class="pick"><div class="top2"><div class="pic">'+ic(p.i)+'</div><div><b>'+esc(p.n)+'</b>'+(s>=3?'<div><span class="chip" style="margin:2px 0 0">Matches your interests</span></div>':'')+'</div></div><div class="why">'+esc(p.w)+'</div><div class="row"><span class="est">Est. '+esc(p.pr)+'</span><a class="find" href="https://www.google.com/search?tbm=shop&q='+encodeURIComponent(p.q)+'" target="_blank" rel="noopener noreferrer">Find it</a><button class="primary" data-a="save" data-n="'+esc(p.n)+'">Save</button></div></div>';
+}
+function sectionsHtml(cat,maxSecs,per){
+  const kws=[];data.forEach(l=>l.gifts.forEach(g=>g.name.toLowerCase().split(/\W+/).forEach(w=>{if(w.length>3)kws.push(w);})));
+  const score=p=>p.t.filter(t=>interests.includes(t)).length*3+(kws.some(w=>p.n.toLowerCase().includes(w)||p.k.includes(w))?2:0);
+  const all=PRODUCTS.map((p,i)=>({p,i,s:score(p)}));
+  let secs=SHOPCATS.filter(c=>cat==="all"||c[0]===cat).map(([id,name])=>{const it=all.filter(x=>x.p.c===id).sort((a,b)=>b.s-a.s||a.i-b.i);return {id,name,it,top:it.length?it[0].s:0};});
+  secs.sort((a,b)=>b.top-a.top);
+  if(maxSecs)secs=secs.slice(0,maxSecs);
+  return secs.map(c=>'<section class="sec"><div class="row sech"><h2>'+esc(c.name)+'</h2>'+(per&&c.it.length>per?'<button class="ghost seeall" data-a="seecat" data-c="'+c.id+'">See all '+c.it.length+'</button>':'')+'</div><div class="ideas" style="margin-top:0">'+c.it.slice(0,per||99).map(x=>pickCard(x.p,x.s)).join("")+'</div></section>').join("");
+}
+function shop(){
+  const cn=(SHOPCATS.find(c=>c[0]===shopCat)||[])[1];
+  return '<h1>Picks for you</h1><p class="sub">Matched to your interests and the gifts in your lists, grouped by section. Tap an interest to change your picks.</p><div class="chips">'+
+   INTERESTS.map(([id,n])=>'<button class="soft'+(interests.includes(id)?" on":"")+'" data-a="int" data-i="'+id+'" aria-pressed="'+interests.includes(id)+'">'+n+'</button>').join("")+'</div>'+
+   (cn?'<div class="row" style="margin-top:14px;align-items:center"><button class="ghost" data-a="clearcat">Show all sections</button></div>':'')+
+   sectionsHtml(shopCat,0,0)+'<p class="meta" style="margin-top:18px">Prices are rough estimates. Find it opens a shopping search so you can see current prices and stores.</p>';
+}
+function renderFab(){
+  let h='';
+  if(fabOpen)h+='<div class="fab-panel"><button class="nv'+(view==="shop"&&shopCat==="all"?" on":"")+'" data-a="fcat" data-c="all">All picks <small>'+PRODUCTS.length+'</small></button>'+SHOPCATS.map(([id,n])=>'<button class="nv'+(view==="shop"&&shopCat===id?" on":"")+'" data-a="fcat" data-c="'+id+'">'+n+' <small>'+PRODUCTS.filter(p=>p.c===id).length+'</small></button>').join("")+'</div>';
+  h+='<button class="fab-btn" data-a="fab" aria-expanded="'+fabOpen+'">'+ic("grid")+'Shop by category</button>';
+  $("fab").innerHTML=h;
+}
+function forYou(){
+  return '<h2 class="fyh" style="margin-top:30px">For you</h2><p class="sub">Gift ideas picked from your interests, section by section. Save one and it goes into a list called Saved ideas.</p>'+sectionsHtml("all",4,3);
+}
+function detail(){
+  const l=find(open);if(!l){open=null;return lists();}
+  const sp=spentOf(l),over=l.budget>0&&sp>l.budget,pct=l.budget>0?Math.min(100,sp/l.budget*100):0;
+  return '<button class="ghost back" data-a="back">Back to all lists</button><div class="row" style="justify-content:space-between;align-items:flex-start"><div><h1>'+esc(l.name)+'</h1><div class="meta">'+esc(l.occasion||"")+(l.occasion?", ":"")+esc(LABEL[l.cat])+'</div>'+when(l)+'</div><button class="ghost" data-a="delL">Delete list</button></div>'+
+   '<div class="meta" style="margin-top:12px"><span class="'+(over?"over":"")+'">'+money(sp)+(l.budget>0?" of "+money(l.budget):" planned")+'</span>'+(over?" (over budget)":"")+'</div>'+(l.budget>0?'<div class="bar"><i class="'+(over?"over":"")+'" style="width:'+pct+'%"></i></div>':'<div style="height:14px"></div>')+
+   '<div class="panel"><ul>'+(l.gifts.length?l.gifts.map(g=>'<li class="'+(g.done?"done":"")+'" data-g="'+g.id+'"><input type="checkbox" data-a="tog" '+(g.done?"checked":"")+' aria-label="Bought">'+(g.img?'<img src="'+esc(g.img)+'" alt="" referrerpolicy="no-referrer">':'')+'<span class="name">'+esc(g.name)+(g.url?'<a href="'+esc(g.url)+'" target="_blank" rel="noopener noreferrer">'+esc(host(g.url))+'</a>':'')+'</span><span class="price">'+(g.price?money(g.price):"")+'</span><button class="ghost" data-a="delG" aria-label="Remove '+esc(g.name)+'">Remove</button></li>').join(""):'<li class="meta">No gifts yet. Add the first one below.</li>')+'</ul>'+
+   '<div class="add-gift row"><input type="text" placeholder="Gift idea" aria-label="Gift idea" maxlength="80"><input type="text" inputmode="url" placeholder="Paste a link to fill in details" aria-label="Link to the gift" maxlength="500"><input class="num" type="number" min="0" inputmode="decimal" placeholder="Price $" aria-label="Price in dollars"><label class="photo"><span>Add photo</span><input type="file" accept="image/*" hidden></label><button class="primary" data-a="addG">Add gift</button></div></div>';
+}
+function ideas(){
+  const opts=data.map(l=>'<option value="'+l.id+'">'+esc(l.name)+'</option>').join("");
+  return '<h1>Idea board</h1><p class="sub">Stuck? Pick who it’s for and send an idea straight to one of your lists.</p><div class="chips">'+
+   CATS.map(c=>'<button class="soft'+(c===ideaCat?" on":"")+'" data-a="icat" data-c="'+c+'">'+LABEL[c].replace("Gifts for ","").replace("Other gifts","Anyone")+'</button>').join("")+'</div>'+
+   (data.length?'':'<p class="msg" style="color:var(--mute)">Create a list first, then you can add ideas to it.</p>')+
+   '<div class="ideas">'+IDEAS[ideaCat].map(n=>'<div class="idea"><b>'+esc(n)+'</b>'+(data.length?'<div class="row"><select aria-label="List for '+esc(n)+'">'+opts+'</select><button class="primary" data-a="addIdea" data-n="'+esc(n)+'">Add</button></div>':'')+'</div>').join("")+'</div>';
+}
+function santaView(){
+  let h='<h1>Secret Santa</h1><p class="sub">Type one name per line. Draw the names, then pass the screen so each person can peek at their match.</p>'+
+   '<textarea id="sn" aria-label="Names, one per line" placeholder="Alex&#10;Sam&#10;Jordan&#10;Riley">'+esc(santa.names)+'</textarea>'+
+   '<div class="row" style="margin-top:10px"><input class="num" type="number" min="0" id="sb" placeholder="Spend limit $" aria-label="Spend limit" value="'+esc(santa.budget)+'"><button class="primary" data-a="draw">Draw names</button>'+(santa.draw?'<button class="soft" data-a="clearSanta">Clear draw</button>':'')+'</div>'+(santa.msg?'<div class="msg">'+esc(santa.msg)+'</div>':'');
+  if(santa.draw){h+='<div class="santa">'+(santa.budget>0?'<div class="meta">Spend limit: '+money(+santa.budget)+' per gift</div>':'')+Object.keys(santa.draw).map(g=>'<div class="draw"><b>'+esc(g)+'</b>'+(shown[g]?'<span>buys for <b>'+esc(santa.draw[g])+'</b></span><button class="ghost" data-a="hide" data-n="'+esc(g)+'">Hide</button>':'<button class="soft" data-a="show" data-n="'+esc(g)+'">Show my match</button>')+'</div>').join("")+'</div>';}
+  return h;
+}
+function render(){renderNav();$("main").innerHTML=view==="lists"?(open?detail():lists()):view==="ideas"?ideas():view==="shop"?shop():santaView();renderFab();}
+
+function doDraw(){
+  const names=[...new Set(santa.names.split("\n").map(s=>s.trim()).filter(Boolean))];
+  if(names.length<3){santa.msg="Add at least 3 different names.";santa.draw=null;return;}
+  let r;for(let i=0;i<500;i++){r=names.slice().sort(()=>Math.random()-.5);if(names.every((n,j)=>n!==r[j]))break;}
+  santa.draw={};names.forEach((n,j)=>santa.draw[n]=r[j]);santa.msg="";shown={};
+}
+const AUTOFILL=true;
+function autofill(inp){
+  if(!AUTOFILL)return;
+  const url=normUrl(inp.value);if(!url)return;
+  const box=inp.closest(".add-gift"),ins=box.querySelectorAll("input"),lab=box.querySelector("label.photo span");
+  lab.textContent="Scanning link…";
+  fetch("/api/preview?url="+encodeURIComponent(url)).then(r=>r.json()).then(d=>{
+    if(d.title&&!ins[0].value.trim())ins[0].value=d.title.slice(0,80);
+    if(d.price&&!ins[2].value)ins[2].value=d.price;
+    if(d.image)pendImg=d.image;
+    lab.textContent=d.image?"Image found":"Add photo";
+  }).catch(()=>{lab.textContent="Add photo";});
+}
+const main=$("main");
+$("nav").addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;
+  if(b.dataset.a==="nav"){if(b.dataset.v==="lists")filter="All";go(b.dataset.v);}
+  if(b.dataset.a==="cat"){filter=b.dataset.c;go("lists");}
+  if(b.dataset.a==="theme")setTheme(b.dataset.t);
+  if(b.dataset.a==="catToggle"){catOpen=!catOpen;renderNav();}
+  if(b.dataset.a==="catMore"){catCount+=4;renderNav();}
+  if(b.dataset.a==="catLess"){catCount=4;renderNav();}
+});
+main.addEventListener("input",e=>{
+  if(e.target.id==="sn"){santa.names=e.target.value;save();}
+  if(e.target.id==="sb"){santa.budget=e.target.value;save();}
+});
+main.addEventListener("change",e=>{
+  if(e.target.getAttribute("inputmode")==="url"){autofill(e.target);return;}
+  if(e.target.type==="file"&&e.target.files[0]){const lab=e.target.parentNode.firstChild;lab.textContent="Adding…";shrink(e.target.files[0],d=>{pendImg=d;lab.textContent=d?"Photo added":"Photo failed";});}
+});
+main.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"||e.target.tagName==="TEXTAREA")return;
+  const g=e.target.closest(".add-gift"),f=e.target.closest(".form");
+  if(g)g.querySelector('[data-a="addG"]').click();else if(f)f.querySelector('[data-a="mk"]').click();
+});
+main.addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a;
+  if(a==="mk"){const n=$("ln");if(!n.value.trim()){n.focus();return;}
+    const l={id:uid(),name:n.value.trim(),cat:$("lc").value,occasion:$("lo").value,date:$("ld").value,budget:parseFloat($("lb").value)||0,gifts:[]};
+    data.unshift(l);save();go("lists",l.id);return;}
+  if(a==="open"){go("lists",b.dataset.id);return;}
+  if(a==="back"){go("lists");return;}
+  if(a==="delL"){data=data.filter(l=>l.id!==open);save();go("lists");return;}
+  if(a==="addG"){const l=find(open),ins=main.querySelectorAll(".add-gift input");
+    if(!ins[0].value.trim()){ins[0].focus();return;}
+    const url=normUrl(ins[1].value);if(url===null){ins[1].focus();ins[1].style.borderColor="var(--warn)";return;}
+    l.gifts.push({id:uid(),name:ins[0].value.trim(),url,price:parseFloat(ins[2].value)||0,img:pendImg,done:false});
+    pendImg="";save();render();main.querySelector(".add-gift input").focus();return;}
+  if(a==="tog"||a==="delG"){const l=find(open),li=b.closest("li"),g=l.gifts.find(x=>x.id===li.dataset.g);
+    if(a==="tog")g.done=b.checked;else l.gifts=l.gifts.filter(x=>x!==g);save();render();return;}
+  if(a==="save"){let l=data.find(x=>x.name==="Saved ideas");if(!l){l={id:uid(),name:"Saved ideas",cat:"Other",occasion:"",date:"",budget:0,gifts:[]};data.unshift(l);}
+    l.gifts.push({id:uid(),name:b.dataset.n,url:"",price:0,img:"",done:false});save();b.textContent="Saved";b.disabled=true;renderNav();return;}
+  if(a==="int"){const i=b.dataset.i;interests=interests.includes(i)?interests.filter(x=>x!==i):interests.concat(i);try{localStorage.setItem("giftly-interests",JSON.stringify(interests));}catch(e){}render();return;}
+  if(a==="clearcat"){shopCat="all";render();return;}
+  if(a==="seecat"){shopCat=b.dataset.c;go("shop");return;}
+  if(a==="icat"){ideaCat=b.dataset.c;render();return;}
+  if(a==="addIdea"){const l=find(b.parentNode.querySelector("select").value);if(!l)return;
+    l.gifts.push({id:uid(),name:b.dataset.n,url:"",price:0,img:"",done:false});save();b.textContent="Added";b.disabled=true;renderNav();return;}
+  if(a==="draw"){santa.names=$("sn").value;santa.budget=$("sb").value;doDraw();save();render();return;}
+  if(a==="clearSanta"){santa.draw=null;santa.msg="";shown={};save();render();return;}
+  if(a==="show"){shown[b.dataset.n]=true;render();return;}
+  if(a==="hide"){delete shown[b.dataset.n];render();return;}
+});
+$("menuBtn").addEventListener("click",()=>{navOpen=!navOpen;applyNav();try{localStorage.setItem("giftly-nav",navOpen?"1":"0");}catch(e){}});
+document.querySelector(".seg").addEventListener("click",e=>{const b=e.target.closest("button");if(b)setMode(b.dataset.m);});
+$("fab").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;
+  if(b.dataset.a==="fab"){fabOpen=!fabOpen;renderFab();}
+  if(b.dataset.a==="fcat"){shopCat=b.dataset.c;fabOpen=false;go("shop");}});
+applyTheme();applyNav();
+render();
+</script>
+</body>
+</html>
